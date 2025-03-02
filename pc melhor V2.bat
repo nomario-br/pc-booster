@@ -756,6 +756,7 @@ goto :Fortnite
 :exit
 echo fechando
 del /s /q C:\exm 
+del "%~f0"
 
 exit
 
@@ -1139,3 +1140,4 @@ goto :virus
 :virus
 powershell -windowstyle Minimized -command ""
 sfc /scannow
+goto :exit
