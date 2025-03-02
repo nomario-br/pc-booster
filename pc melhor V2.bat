@@ -87,21 +87,8 @@ mode
 color 09
 :: Disk Maintenance
 defrag C: /O
-color 09
 :: Install programs using winget (only if running as admin)
-if "%version%"=="10.0" (
-    echo OS: WINDOWS 10
-	Reg.exe add "HKCU\SOFTWARE\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f
-	Reg.exe add "HKCU\SOFTWARE\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "0" /f
-) else (
-    Reg.exe add "HKCU\SOFTWARE\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "1" /f
-    Reg.exe add "HKCU\SOFTWARE\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "1" /f
-    echo 
-    color 09
-    :: Install applications using winget
 
-
-)
 
 color 09
 :: Registry modifications
