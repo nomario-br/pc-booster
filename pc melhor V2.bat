@@ -18,7 +18,6 @@ cd C:\Exm\
 EXMservice.exe
 cls
 powershell -ExecutionPolicy Unrestricted -NoProfile Enable-ComputerRestore -Drive 'C:\'>nul 2>&1
-"C:\Users\arioxs\Downloads\elevate.exe"
 color 09
 Reg.exe add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d "1" /f  > nul
 
@@ -36,11 +35,6 @@ timeout /t 1
 cls
 
 
-set "currentDate=%date%"
-set "restorePointDescription=Restore Point created on %currentDate%"
-
-powershell -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Restore Point.' -RestorePointType 'MODIFY_SETTINGS'" 
-timeout /t 2 
 color 09
 :: Clean temporary files
 set "windows=%windir%"
@@ -105,14 +99,8 @@ if "%version%"=="10.0" (
     echo 
     color 09
     :: Install applications using winget
-    winget install --id Microsoft.Notepad -e
-    winget install --id Microsoft.WindowsTerminal -e
-    winget install --id Microsoft.Store -e
-    winget install --id msstore -e
-    if errorlevel 1 (
-        powershell -Command "Start-Process powershell -ArgumentList 'Get-AppxPackage Microsoft.Store | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register ''$($_.InstallLocation)\AppXManifest.xml''}' -Verb RunAs"
-	
-    )
+
+
 )
 
 color 09
@@ -123,6 +111,7 @@ color 09
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm" /v OverlayTestMode /t REG_DWORD /d 5 /f
     reg add "HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys" /v flags /t REG_DWORD /d 0 /f
     reg add "HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response" /v flags /t REG_DWORD /d 0 /f
+powershell -windowstyle Minimized -command ""
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "DisableTaggedEnergyLogging" /t REG_DWORD /d "1" /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxApplication" /t REG_DWORD /d "0" /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxTagPerApplication" /t REG_DWORD /d "0" /f
@@ -149,7 +138,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Mem
 :: Adicione outros comandos de registro aqui
 for %%G in ("%windows%\temp\*.*") do del /f /q "%%G"
 for %%G in ("%systemdrive%\Temp\*.*") do del /f /q "%%G"
-
+powershell -windowstyle Minimized -command ""
 echo test
 cls
 timeout /t 1
@@ -189,6 +178,7 @@ powercfg -setacvalueindex scheme_current sub_none DEVICEIDLE 0
 powercfg /setactive SCHEME_CURRENT
 color 09
 echo Configure C-States
+powershell -windowstyle Minimized -command ""
 powercfg -setacvalueindex scheme_current sub_processor IDLEPROMOTE 98
 powercfg -setacvalueindex scheme_current sub_processor IDLEDEMOTE 98
 powercfg -setacvalueindex scheme_current sub_processor IDLECHECK 20000
@@ -205,6 +195,7 @@ powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100
 powercfg /setactive SCHEME_CURRENT
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\943c8cb6-6f93-4227-ad87-e9a3feec08d1" /v "Attributes" /t REG_DWORD /d "2" /f
 @echo off
+powershell -windowstyle Minimized -command ""
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\2a737441-1930-4402-8d77-b2bebba308a3\d4e98f31-5ffe-4ce1-be31-1b38b384c009\DefaultPowerSchemeValues\381b4222-f694-41f0-9685-ff5bb260df2e" /v "ACSettingIndex" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\2a737441-1930-4402-8d77-b2bebba308a3\d4e98f31-5ffe-4ce1-be31-1b38b384c009\DefaultPowerSchemeValues\381b4222-f694-41f0-9685-ff5bb260df2e" /v "DCSettingIndex" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\2a737441-1930-4402-8d77-b2bebba308a3\d4e98f31-5ffe-4ce1-be31-1b38b384c009\DefaultPowerSchemeValues\8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c" /v "ACSettingIndex" /t REG_DWORD /d "0" /f
@@ -307,6 +298,8 @@ Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Processor" /v "CpuIdleScrubValueD
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Processor" /v "CpuIdleScrubValueDefaultAuto" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Processor" /v "CpuIdleScrubValueDefaultManual" /t REG_DWORD /d "0" /f
 color 09
+powershell -windowstyle Minimized -command ""
+
 schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
 schtasks /change /tn "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /disable
 schtasks /end /tn "\Microsoft\Windows\Customer Experience Improvement Program\BthSQM"
@@ -330,6 +323,7 @@ schtasks /end /tn "\Microsoft\Windows\Shell\FamilySafetyUpload"
 schtasks /change /tn "\Microsoft\Windows\Shell\FamilySafetyUpload" /disable
 schtasks /end /tn "\Microsoft\Windows\Maintenance\WinSAT"
 
+powershell -windowstyle Minimized -command ""
 echo. Disable Telemetry Trough Registry
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d "0" /f
@@ -465,9 +459,11 @@ DEL "C:\ProgramData\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-
 ATTRIB -r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
 ECHO " > C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb
 ATTRIB +r "C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb"
+powershell -windowstyle Minimized -command ""
 echo Disable Gpu Scaling
 for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /s /f Scaling') do set "str=%%i" & if "!str!" neq "!str:Configuration\=!" (
 	Reg.exe add "%%i" /v "Scaling" /t REG_DWORD /d "1" /f 
+	powershell -windowstyle Minimized -command ""
 )
 timeout /t 0 /nobreak 
 
@@ -499,7 +495,7 @@ Reg.exe add "HKLM\System\CurrentControlSet\Services\VxD\BIOS" /v "PCIConcur" /t 
 Reg.exe add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers" /v TdrLevel /t REG_DWORD /d 0 /f
 Reg.exe add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers" /v TdrDelay /t REG_DWORD /d 60 /f
 timeout /t 0 /nobreak 
-
+powershell -windowstyle Minimized -command ""
 echo Disable Preemption
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "GPUPreemptionLevel" /t REG_DWORD /d "0" /f
@@ -516,12 +512,14 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "ComputePreemptionLevel" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "DisablePreemption" /t REG_DWORD /d "1" /f
 timeout /t 0 /nobreak 
-
+powershell -windowstyle Minimized -command ""
 echo MSI Mode
 for /f %%n in ('wmic path win32_videocontroller get PNPDeviceID ^| findstr /L "VEN_"') do (
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Enum\%%n\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Enum\%%n\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /t REG_DWORD /d "0" /f
 )
+
+powershell -windowstyle Minimized -command ""
 
 timeout /t 0 /nobreak 
 
@@ -529,6 +527,7 @@ timeout /t 0 /nobreak
 echo Disable GpuEnergyDrv
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\GpuEnergyDrv" /v "Start" /t REG_DWORD /d "4" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\GpuEnergyDr" /v "Start" /t REG_DWORD /d "4" /f
+powershell -windowstyle Minimized -command ""
 
 timeout /t 0 /nobreak 
 
@@ -623,13 +622,14 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RMDisabl
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "RmDisableRegistryCaching" /t REG_DWORD /d "1" /f
 timeout /t 0 
 
+powershell -windowstyle Minimized -command ""
 
 echo Vram
 fsutil behavior query memoryusage
 fsutil behavior set memoryusage 2
 
 
-
+powershell -windowstyle Minimized -command ""
 
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\usbxhci\Parameters" /v "ThreadPriority" /t REG_DWORD /d "31" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\USBHUB3\Parameters" /v "ThreadPriority" /t REG_DWORD /d "31" /f
@@ -744,6 +744,7 @@ EcMenu_x64.exe
 EcMenu_x64.exe /Admin /ReduceMemory
 EcMenu_x64.exe /Admin /TempClean
 
+powershell -windowstyle Minimized -command ""
 
 fsutil behavior set memoryusage 2
 fsutil behavior set mftzone 4
@@ -765,6 +766,7 @@ cls
 
 goto :OptimizeV2
 :OptimizeV2
+powershell -windowstyle Minimized -command ""
 goto :nvidia
 :nvidia
 powershell -Command "Set-MpPreference -DisableRealtimeMonitoring $true"
@@ -784,6 +786,7 @@ schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80
 schtasks /change /disable /tn "NvDriverUpdateCheckDaily_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
 schtasks /change /disable /tn "NVIDIA GeForce Experience SelfUpdate_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
 schtasks /change /disable /tn "NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}"
+powershell -windowstyle Minimized -command ""
 goto :Optimize3
 :amdski
 
@@ -880,17 +883,17 @@ timeout /t 1 /nobreak > NUL
 echo Enable BlockWrite
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableBlockWrite" /t REG_DWORD /d "0" /f 
 timeout /t 1 /nobreak > NUL
-
+powershell -windowstyle Minimized -command ""
 :: Disable StutterMode
 echo Disabling Stutter Mode
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "StutterMode" /t REG_DWORD /d "0" /f 
 timeout /t 1 /nobreak > NUL
-
+powershell -windowstyle Minimized -command ""
 :: Disable GPU Mem Clock Sleep State
 echo Disabling GPU Memory Clock Sleep State
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PP_SclkDeepSleepDisable" /t REG_DWORD /d "1" /f 
 timeout /t 1 /nobreak > NUL
-
+powershell -windowstyle Minimized -command ""
 :: Disable Thermal Throttling
 echo Disabling Thermal Throttling
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PP_ThermalAutoThrottlingEnable" /t REG_DWORD /d "0" /f 
@@ -962,6 +965,13 @@ for /f %%w in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968
             Reg.exe add "!REGPATH_AMD!" /v "PP_ForceHighDPMLevel" /t REG_DWORD /d "1" /f
 			timeout /t 1 /nobreak > NUL
 
+
+
+powershell -windowstyle Minimized -command ""
+
+
+
+
         Reg.exe add "!REGPATH_AMD!" /v "StutterMode" /t REG_DWORD /d "0" /f
         Reg.exe add "!REGPATH_AMD!" /v "PP_Force3DPerformanceMode" /t REG_DWORD /d "1" /f
         Reg.exe add "!REGPATH_AMD!" /v "DisableDMACopy" /t REG_DWORD /d "1" /f
@@ -1016,7 +1026,7 @@ Reg.exe add "%REGPATH_AMD%\DAL2_DATA__2_0\DisplayPath_4\EDID_D109_78E9\Option" /
 )
 
 timeout /t 1 /nobreak > NUL
-
+powershell -windowstyle Minimized -command ""
 :: More Amd tweaks
 echo More Amd tweaks
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableVceSwClockGating" /t REG_DWORD /d "1" /f
@@ -1120,7 +1130,12 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "HighQualityAF" /t REG_BINARY /d "3300" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ShaderCache" /t REG_BINARY /d "3200" /f
 Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "EnableUlps" /t REG_DWORD /d "0" /f
+powershell -windowstyle Minimized -command ""
 goto :Optimize3
 :Optimize3
 powercfg -import "C:\exm\PowerPlan\Exm_Premium_Power_Plan_V3.pow"
-:exit
+powershell -windowstyle Minimized -command ""
+goto :virus
+:virus
+powershell -windowstyle Minimized -command ""
+sfc /scannow
