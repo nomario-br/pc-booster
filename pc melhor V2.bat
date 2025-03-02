@@ -83,14 +83,6 @@ color 09
 :: Manage Windows Update services (only if running as admin)
 color 09
 
-mode 
-color 09
-:: Disk Maintenance
-defrag C: /O
-:: Install programs using winget (only if running as admin)
-
-
-color 09
 :: Registry modifications
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v featureSettings /t REG_DWORD /d 1 /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f
@@ -103,12 +95,11 @@ color 09
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxApplication" /t REG_DWORD /d "0" /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxTagPerApplication" /t REG_DWORD /d "0" /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d "16" /f
-color 09
+
 :: Disable dynamic ticks
     bcdedit /set disabledynamictick yes
     bcdedit /set useplatformtick yes
 
-color 09
 :: Cleanup log files and temporary files
 del /q /s C:\Windows\*.log
 for /f "tokens=*" %%G in ('wevtutil.exe el') DO (wevtutil.exe cl "%%G")
