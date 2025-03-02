@@ -743,15 +743,7 @@ EcMenu_x64.exe
 
 EcMenu_x64.exe /Admin /ReduceMemory
 EcMenu_x64.exe /Admin /TempClean
-winget upgrade --all
-@echo off & powershell -Command "Get-AppxPackage *officehub* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *Microsoft.Windows.Cortana* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *phone* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *people* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *messaging* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *maps* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *groove* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *getstarted* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *calendar* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *alarms* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *3dbuilder* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *camera* | Remove-AppxPackage" & powershell -Command "Get-AppxPackage *news* | Remove-AppxPackage"
-@echo off & reg add "HKCU\System\GameConfigStore" /v GameDVR_Enabled /t REG_DWORD /d 0 /f & reg add "HKLM\Software\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v Value /t REG_DWORD /d 0 /f & reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MapsBroker" /v Start /t REG_DWORD /d 4 /f & reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v EnablePrefetcher /t REG_DWORD /d 0 /f & reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v EnableSuperfetch /t REG_DWORD /d 0 /f & reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SubscribedContent-310093Enabled /t REG_DWORD /d 0 /f & reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f 
-@echo off & bcdedit /set useplatformtick yes & bcdedit /set disabledynamictick yes & bcdedit /set bootux disabled & bcdedit /set bootmenupolicy standard & bcdedit /set quietboot yes & bcdedit /set increaseuserva 268435328 & bcdedit /set firstmegabytepolicy UseAll & bcdedit /set avoidlowmemory 0x8000000 & bcdedit /set nolowmem Yes & bcdedit /set allowedinmemorysettings 0x0 & bcdedit /set isolatedcontext No & 
-@echo off & reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d 1 /f & reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t REG_DWORD /d 1 /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\RobloxPlayerBeta.exe" /f & reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\RobloxPlayerBeta.exe\PerfOptions" /f & reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\RobloxPlayerBeta.exe\PerfOptions" /v CpuPriorityClass /t REG_DWORD /d 3 /f
-set "windows=%windir%" & set "systemdrive=%systemdrive%" & set "userprofile=%userprofile%" & set "temp=%temp%" & set "history=%userprofile%\Local Settings\History" & set "cookies=%userprofile%\Cookies" & set "recent=%userprofile%\Recent" & set "printers=%systemroot%\system32\spool\printers" & del /s /f /q "%windows%\temp\*.*" 2>nul & del /s /f /q "%windows%\Prefetch\*.exe" 2>nul & del /s /f /q "%windows%\Prefetch\*.dll" 2>nul & del /s /f /q "%windows%\Prefetch\*.pf" 2>nul & del /s /f /q "%windows%\system32\dllcache\*.*" 2>nul & del /s /f /q "%systemdrive%\Temp\*.*" 2>nul & del /s /f /q "%history%\*.*" 2>nul & del /s /f /q "%userprofile%\Local Settings\Temporary Internet Files\*.*" 2>nul & del /s /f /q "%userprofile%\Local Settings\Temp\*.*" 2>nul & del /s /f /q "%recent%\*.*" 2>nul & del /s /f /q "%cookies%\*.*" 2>nul
 
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\GTA5.exe" /f & reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\GTA5.exe\PerfOptions" /f & reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\GTA5.exe\PerfOptions" /v CpuPriorityClass /t REG_DWORD /d 3 /f
 
 fsutil behavior set memoryusage 2
 fsutil behavior set mftzone 4
@@ -761,7 +753,7 @@ fsutil behavior set encryptpagingfile 0
 
 goto :Fortnite
 :exit
-echo fecha se n quiser usar o bglh do dism
+echo fechando
 del /s /q C:\exm 
 
 exit
@@ -773,12 +765,13 @@ cls
 
 goto :OptimizeV2
 :OptimizeV2
-echo Only do these on an amd gpu, Type "yes" if you have one, "no" if you have an nvvidia one
-set /p input=:
-if /i %input% == yes goto amdski
-if /i %input% == no goto :nvidia
+goto :nvidia
 :nvidia
+powershell -Command "Set-MpPreference -DisableRealtimeMonitoring $true"
+
 start "" /wait "C:\exm\NvidiaProfileInspector\nvidiaProfileInspector.exe" "C:\exm\NvidiaProfileInspector\Exm_Premium_Profile_V4.nip"
+
+powershell -Command "Set-MpPreference -DisableRealtimeMonitoring $false"
 
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d "0" /f
