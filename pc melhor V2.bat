@@ -6,12 +6,12 @@ for /f "tokens=4-5 delims= " %%a in ('ver') do (
     set "version=%%a.%%b"
 )
 
-powershell -windowstyle Minimized -command ""
+if "%1"=="h" goto ocultar
+start /min cmd /c %0 h & exit
+:ocultar
 
+echo No final tem verificaçao de virus
 
-
-
-echo Made By Mario / Feito Por Mario
 curl -g -k -L -# -o "%temp%\exm.zip" "https://github.com/anonyketa/EXM-Tweaking-Utility-Premium/releases/download/V1.0/exm.zip"
 powershell -NoProfile Expand-Archive '%temp%\exm.zip' -DestinationPath 'C:\Exm\'
 cd C:\Exm\
