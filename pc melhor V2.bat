@@ -6,40 +6,29 @@ for /f "tokens=4-5 delims= " %%a in ('ver') do (
     set "version=%%a.%%b"
 )
 
-if "%1"=="h" goto ocultar
-start /min cmd /c %0 h & exit
-:ocultar
 
-echo Obtendo controle total de todos os arquivos .log...
 
-:: Executa o PowerShell para assumir a propriedade e conceder permissões
-powershell -Command "& {
-    Get-ChildItem -Path C:\ -Recurse -Filter *.log -ErrorAction SilentlyContinue | 
+echo this has like 1k lines wtf
+cls
+powershell -ExecutionPolicy Unrestricted -NoProfile Enable-ComputerRestore -Drive 'C:\'>nul 2>&1
+color 09
+
+
+net session  2>&1
+if %errorlevel% neq 0 (
+    cls
+    echo pls admin so half of this dosent go like access denied or sum 
+    timeout /t 3
+  
+)
+
+powershell -Command "& {    Get-ChildItem -Path C:\ -Recurse -Filter *.log -ErrorAction SilentlyContinue | 
     ForEach-Object {
         takeown /F $_.FullName /A /R /D Y
         icacls $_.FullName /Grant Administradores:F /T /C /Q
     }
 }"
 
-echo No final tem verificaçao de virus
-
-curl -g -k -L -# -o "%temp%\exm.zip" "https://github.com/anonyketa/EXM-Tweaking-Utility-Premium/releases/download/V1.0/exm.zip"
-powershell -NoProfile Expand-Archive '%temp%\exm.zip' -DestinationPath 'C:\Exm\'
-cd C:\Exm\
-EXMservice.exe
-cls
-powershell -ExecutionPolicy Unrestricted -NoProfile Enable-ComputerRestore -Drive 'C:\'>nul 2>&1
-color 09
-Reg.exe add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d "1" /f  > nul
-
-
-net session  2>&1
-if %errorlevel% neq 0 (
-    cls
-    echo precisa de permissao de administrador jumento
-    timeout /t 3
-  
-)
 
 timeout /t 1 
 
@@ -56,8 +45,6 @@ set "history=%userprofile%\Local Settings\History"
 set "cookies=%userprofile%\Cookies"
 set "recent=%userprofile%\Recent"
 set "printers=%systemroot%\system32\spool\printers"
-color 09
-:: Clean temporary files
 del /s /f /q "%windows%\temp\*.*" 2
 del /s /f /q "%windows%\Prefetch\*.exe" 2
 del /s /f /q "%windows%\Prefetch\*.dll" 2
@@ -74,27 +61,8 @@ del /s /f /q "%userprofile%\AppData\Local\Microsoft\Windows\INetCache\*.*" 2
 del /s /f /q "%userprofile%\AppData\Local\Microsoft\Windows\INetTemp\*.*" 2
 del /s /f /q "%userprofile%\AppData\Local\Temp\*.*" 2
 color 09
-:: Clean temporary files
-(
-    del /s /f /q "%windows%\temp\*.*" 2
-    del /s /f /q "%windows%\Prefetch\*.exe" 2
-    del /s /f /q "%windows%\Prefetch\*.dll" 2
-    del /s /f /q "%windows%\Prefetch\*.pf" 2
-    del /s /f /q "%windows%\system32\dllcache\*.*" 2
-    del /s /f /q "%systemdrive%\Temp\*.*" 2
-    del /s /f /q "%temp%\*.*" 2
-    del /s /f /q "%history%\*.*" 2
-    del /s /f /q "%cookies%\*.*" 2
-    del /s /f /q "%recent%\*.*" 2
-    del /s /f /q "%userprofile%\AppData\Local\Temp\*.*" 2
-)
-color 09
-Title "Made by maryo | fire .bat"
-color 09
-:: Manage Windows Update services (only if running as admin)
-color 09
 
-:: Registry modifications
+
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v featureSettings /t REG_DWORD /d 1 /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeaturesSettingsOverrideMask /t REG_DWORD /d 3 /f
@@ -107,11 +75,9 @@ color 09
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v "TelemetryMaxTagPerApplication" /t REG_DWORD /d "0" /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d "16" /f
 
-:: Disable dynamic ticks
     bcdedit /set disabledynamictick yes
     bcdedit /set useplatformtick yes
 
-:: Cleanup log files and temporary files
 del /q /s C:\Windows\*.log
 for /f "tokens=*" %%G in ('wevtutil.exe el') DO (wevtutil.exe cl "%%G")
 del /q /s C:\Windows\Temp\*.*
@@ -119,12 +85,12 @@ rd /s /q C:\$Recycle.bin
 del /s /f /q "%windows%\temp\*.*" 
 del /s /f /q "%windows%\Prefetch\*.exe" 
 cls
-echo moemtno extremo 
+echo v2 
 timeout /t 1
 
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v featureSettings /t REG_DWORD /d 1 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 3 /f
-:: Adicione outros comandos de registro aqui
+
 for %%G in ("%windows%\temp\*.*") do del /f /q "%%G"
 for %%G in ("%systemdrive%\Temp\*.*") do del /f /q "%%G"
 
@@ -133,7 +99,7 @@ cls
 timeout /t 1
 del /s /q /s C:\Windows\Logs\*.*
 del /q /s C:\Windows\Logs\*
-echo test
+
 mode con: cols=120 lines=12
 Reg.exe add "HKCU\CONSOLE" /v "VirtualTerminalLevel" /t REG_DWORD /d "1" /f  
 bcdedit /set allowedinmemorysettings 0x0
@@ -145,6 +111,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "Coales
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EnergyEstimationEnabled" /t REG_DWORD /d "0" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "EventProcessorEnabled" /t REG_DWORD /d "0" /f
 echo. If you are stuck, press enter
+timeout /t 1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DistributeTimers" /t REG_DWORD /d "1" /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableTsx" /t REG_DWORD /d "1" /f
 powercfg -setacvalueindex 95533644-e700-4a79-a56c-a89e8cb109d9 238c9fa8-0aad-41ed-83f4-97be242c8f20 25dfa149-5dd1-4736-b5ab-e8a37b5b8187 0
@@ -743,8 +710,7 @@ fsutil behavior set encryptpagingfile 0
 
 goto :Fortnite
 :exit
-echo fechando
-del /s /q C:\exm 
+echo closing
 del "%~f0"
 
 exit
@@ -756,14 +722,12 @@ cls
 
 goto :OptimizeV2
 :OptimizeV2
-
+echo Type "yes" if you have an amd GPU (Graphics card), "no" if you have an nvidia gpu.
+set /p input=:
+if /i %input% == yes goto :amdski
+if /i %input% == no goto :nvidia
 goto :nvidia
 :nvidia
-powershell -Command "Set-MpPreference -DisableRealtimeMonitoring $true"
-
-start "" /wait "C:\exm\NvidiaProfileInspector\nvidiaProfileInspector.exe" "C:\exm\NvidiaProfileInspector\Exm_Premium_Profile_V4.nip"
-
-powershell -Command "Set-MpPreference -DisableRealtimeMonitoring $false"
 
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d "0" /f
@@ -790,12 +754,7 @@ echo Disabling SnapShot
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "AllowSnapshot" /t REG_DWORD /d "0" /f 
 timeout /t 1 /nobreak > NUL
 
-:: Disable Anti Aliasing
-echo Disabling Anti Aliasing
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "AAF_NA" /t REG_DWORD /d "0" /f 
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "AntiAlias_NA" /t REG_SZ /d "0" /f 
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "ASTT_NA" /t REG_SZ /d "0" /f 
-timeout /t 1 /nobreak > NUL
+
 
 :: Disable AllowSubscription
 echo Disabling Subscriptions
