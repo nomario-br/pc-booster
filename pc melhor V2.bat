@@ -1082,7 +1082,6 @@ Reg.exe add "HKLM\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08
 
 goto :Optimize3
 :Optimize3
-powercfg -import "C:\exm\PowerPlan\Exm_Premium_Power_Plan_V3.pow"
 
 goto :virus
 :virus
