@@ -6,7 +6,11 @@ for /f "tokens=4-5 delims= " %%a in ('ver') do (
     set "version=%%a.%%b"
 )
 
-
+if not "%minimized%"=="" goto :minimized
+set minimized=true
+start /min cmd /C "%~dpnx0"
+goto :EOF
+:minimized
 
 echo this has like 1k lines wtf
 cls
